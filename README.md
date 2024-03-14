@@ -4,10 +4,10 @@
 
 ## Demo
 
-### Barnsley Fern
+### Fractal Plant / Barnsley Fern
 https://github.com/patrick22414/rewrite/assets/32917395/e20cef6a-da43-4068-8189-9f3157a20d80
 
-### Binary Tree
+### Fractal / Binary Tree
 https://github.com/patrick22414/rewrite/assets/32917395/ea0245ea-b9ae-4a01-bd02-308c36333a8c
 
 ### Dragon Curve
