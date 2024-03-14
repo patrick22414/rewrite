@@ -1,6 +1,12 @@
 package system
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+	"time"
+
+	"github.com/patrick22414/rewrite/render"
+)
 
 type KochCurve struct{}
 
@@ -17,4 +23,13 @@ func (KochCurve) Rule(r rune) []rune {
 	default:
 		panic(fmt.Sprintf("unknown rune: %v", r))
 	}
+}
+
+var KochCurveRenderOptions = render.RenderOptions{
+	InitX:         20,
+	InitY:         700,
+	InitDirection: math.Pi / 2,
+	InitMagnitude: 15,
+	TurnAngle:     math.Pi / 2,
+	Interval:      10 * time.Millisecond,
 }

@@ -1,6 +1,12 @@
 package system
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+	"time"
+
+	"github.com/patrick22414/rewrite/render"
+)
 
 type DragonCurve struct{}
 
@@ -19,4 +25,13 @@ func (DragonCurve) Rule(r rune) []rune {
 	default:
 		panic(fmt.Sprintf("unknown rune: %v", r))
 	}
+}
+
+var DragonCurveRenderOptions = render.RenderOptions{
+	InitX:         800,
+	InitY:         480,
+	InitDirection: math.Pi / 2,
+	InitMagnitude: 15,
+	TurnAngle:     math.Pi / 2,
+	Interval:      10 * time.Millisecond,
 }
