@@ -34,7 +34,7 @@ var aa = false
 type Game struct {
 	i                 int // iteration count
 	runes             []rune
-	rewrite           chan []rune
+	rewrite           <-chan []rune
 	renderer          render.PathRenderer
 	path              vector.Path
 	cancelAsyncRender chan struct{}
@@ -139,21 +139,18 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 	return SW, SH
 }
 
-func Start(sys system.System, opt render.RenderOptions) {
+func Start(sys system.System, rend render.PathRenderer) {
 	ebiten.SetWindowSize(SW, SH)
 	ebiten.SetWindowTitle("Rewrite — L-systems in Go")
 
 	rewrite := system.Rewrite(sys)
 	runes := <-rewrite
-	renderer := &render.DefaultPathRenderer{
-		RenderOptions: opt,
-	}
-	path := renderer.Render(runes)
+	path := rend.Render(runes)
 
 	game := &Game{
 		runes:    runes,
 		rewrite:  rewrite,
-		renderer: renderer,
+		renderer: rend,
 		path:     path,
 	}
 

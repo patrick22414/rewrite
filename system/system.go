@@ -5,23 +5,23 @@ type System interface {
 	Rule(r rune) []rune
 }
 
-func Rewrite(sys System) (output chan []rune) {
-	output = make(chan []rune, 1)
+func Rewrite(sys System) <-chan []rune {
+	out := make(chan []rune)
 
 	go func() {
 		runes := sys.Axioms()
 
-		output <- runes
+		out <- runes
 
 		for {
 			newRunes := make([]rune, 0, cap(runes)*2)
 			for _, r := range runes {
 				newRunes = append(newRunes, sys.Rule(r)...)
 			}
-			output <- newRunes
+			out <- newRunes
 			runes = newRunes
 		}
 	}()
 
-	return
+	return out
 }

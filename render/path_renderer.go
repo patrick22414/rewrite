@@ -25,7 +25,7 @@ type DefaultPathRenderer struct {
 }
 
 // Render a single rune.
-func (ren *DefaultPathRenderer) RenderStep(r rune, t Turtle, s TurtleStack, p vector.Path) (Turtle, TurtleStack, vector.Path) {
+func (rend *DefaultPathRenderer) RenderStep(r rune, t Turtle, s TurtleStack, p vector.Path) (Turtle, TurtleStack, vector.Path) {
 	switch r {
 	case 'X':
 		// do nothing
@@ -33,9 +33,9 @@ func (ren *DefaultPathRenderer) RenderStep(r rune, t Turtle, s TurtleStack, p ve
 		t = t.Move()
 		p.LineTo(float32(t.x), float32(t.y))
 	case '+':
-		t = t.Turn(ren.TurnAngle)
+		t = t.Turn(rend.TurnAngle)
 	case '-':
-		t = t.Turn(-ren.TurnAngle)
+		t = t.Turn(-rend.TurnAngle)
 	case '[':
 		s.Push(t)
 	case ']':
@@ -47,35 +47,35 @@ func (ren *DefaultPathRenderer) RenderStep(r rune, t Turtle, s TurtleStack, p ve
 	return t, s, p
 }
 
-func (ren *DefaultPathRenderer) Render(runes []rune) vector.Path {
+func (rend *DefaultPathRenderer) Render(runes []rune) vector.Path {
 	t := Turtle{
-		x: ren.InitX,
-		y: ren.InitY,
-		a: ren.InitDirection,
-		d: ren.InitMagnitude,
+		x: rend.InitX,
+		y: rend.InitY,
+		a: rend.InitDirection,
+		d: rend.InitMagnitude,
 	}
 	s := make(TurtleStack, 0)
 	var p vector.Path
 	p.MoveTo(float32(t.x), float32(t.y))
 
 	for _, r := range runes {
-		t, s, p = ren.RenderStep(r, t, s, p)
+		t, s, p = rend.RenderStep(r, t, s, p)
 	}
 
 	return p
 }
 
-func (ren *DefaultPathRenderer) AsyncRender(runes []rune, cancel <-chan struct{}) <-chan vector.Path {
+func (rend *DefaultPathRenderer) AsyncRender(runes []rune, cancel <-chan struct{}) <-chan vector.Path {
 	out := make(chan vector.Path)
 
 	go func() {
 		defer close(out)
 
 		t := Turtle{
-			x: ren.InitX,
-			y: ren.InitY,
-			a: ren.InitDirection,
-			d: ren.InitMagnitude,
+			x: rend.InitX,
+			y: rend.InitY,
+			a: rend.InitDirection,
+			d: rend.InitMagnitude,
 		}
 		s := make(TurtleStack, 0)
 		var p vector.Path
@@ -83,7 +83,7 @@ func (ren *DefaultPathRenderer) AsyncRender(runes []rune, cancel <-chan struct{}
 		for _, r := range runes {
 			select {
 			case out <- p:
-				t, s, p = ren.RenderStep(r, t, s, p)
+				t, s, p = rend.RenderStep(r, t, s, p)
 			case <-cancel:
 				return
 			}
